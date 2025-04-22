@@ -1,1 +1,26 @@
-alert tcp any any -> any 80 (msg:"SQL Injection test"; content:"id="; sid:1000001;)
+# Regla básica para detección de parámetros sospechosos en URLs
+alert tcp any any -> any 80 (msg:"SQL Injection test - basic id param"; content:"id="; sid:1000001;)
+
+# Regla para detectar uso de OR 1=1 en las URLs
+alert tcp any any -> any 80 (msg:"SQL Injection test - OR 1=1"; content:"OR 1=1"; nocase; sid:1000002;)
+
+# Regla para detectar comillas simples típicas de SQLi
+alert tcp any any -> any 80 (msg:"SQL Injection test - single quote"; content:"'"; sid:1000003;)
+
+# Regla para detectar comentarios usados para obfuscar inyecciones
+alert tcp any any -> any 80 (msg:"SQL Injection test - SQL comment --"; content:"--"; sid:1000004;)
+
+# Regla para detectar UNION SELECT usado para extraer datos
+alert tcp any any -> any 80 (msg:"SQL Injection test - UNION SELECT"; content:"UNION SELECT"; nocase; sid:1000005;)
+
+# Regla para detectar palabras clave de bases de datos comunes
+alert tcp any any -> any 80 (msg:"SQL Injection test - keyword: information_schema"; content:"information_schema"; nocase; sid:1000006;)
+
+# Regla para detectar el uso de 'DROP TABLE'
+alert tcp any any -> any 80 (msg:"SQL Injection test - DROP TABLE"; content:"DROP TABLE"; nocase; sid:1000007;)
+
+# Regla para detectar inyecciones que usan sleep para time-based SQLi
+alert tcp any any -> any 80 (msg:"SQL Injection test - time-based sleep"; content:"sleep("; nocase; sid:1000008;)
+
+# Regla para detección de acceso a archivos a través de SQLi (ej: LOAD_FILE)
+alert tcp any any -> any 80 (msg:"SQL Injection test - LOAD_FILE attempt"; content:"LOAD_FILE"; nocase; sid:1000009;)
